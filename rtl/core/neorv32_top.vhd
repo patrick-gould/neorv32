@@ -134,7 +134,7 @@ entity neorv32_top is
     IO_SLINK_EN           : boolean                        := false;       -- implement stream link interface (SLINK)
     IO_SLINK_RX_FIFO      : natural range 1 to 2**15       := 1;           -- RX FIFO depth, has to be a power of two, min 1
     IO_SLINK_TX_FIFO      : natural range 1 to 2**15       := 1;           -- TX FIFO depth, has to be a power of two, min 1
-    IO_TRACER_EN          : boolean                        := false;       -- implement instruction tracer
+    IO_TRACER_EN          : boolean                        := true;       -- implement instruction tracer
     IO_TRACER_BUFFER      : natural range 1 to 2**15       := 1;           -- trace buffer depth, has to be a power of two, min 1
     IO_TRACER_SIMLOG_EN   : boolean                        := false        -- write full trace log to file (simulation-only)
   );
