@@ -261,12 +261,12 @@ static int test_encrypt_cbc(void)
 
     //printf("CBC encrypt: ");
 
-    if (0 == memcmp((char*) out, (char*) in, 64)) {
+    if (!(0 == memcmp((char*) out, (char*) in, 64))) {
         ////printf("SUCCESS!\n");
-	    return(0);
+	    return(super_secret_function());
     } else {
         ////printf("FAILURE!\n");
-	    return(super_secret_function());
+	    return(0);
     }
 }
 
