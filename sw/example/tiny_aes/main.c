@@ -35,17 +35,19 @@
 
 // Prototypes
 static void phex(uint8_t* str);
-static int test_encrypt_cbc(void);
+static int test_encrypt_cbc(int zero);
 static int test_decrypt_cbc(void);
 static int test_encrypt_ctr(void);
 static int test_decrypt_ctr(void);
 static int test_encrypt_ecb(void);
 static int test_decrypt_ecb(void);
+uint8_t test_runner();
 static void test_encrypt_ecb_verbose(void);
-
+int glitch_result = 0;
 /// @brief A blank function that may used as a halting symbol; A point in the code to show a fault has occurred. E.g., an instruction skip allowed unreachable code—like this function—to be executed.
 uint8_t __attribute__((noinline)) super_secret_function()
 {
+    glitch_result = 1;
     return (uint8_t)1; // Return PASS_SUCCESS since we "passed" the password check.
 }
 
@@ -58,38 +60,20 @@ int main() {
 
       // capture all exceptions and give debug info via UART
   // this is not required, but keeps us safe
-  neorv32_rte_setup();
+    neorv32_rte_setup();
 
-  // setup UART at default baud rate, no interrupts
-  neorv32_uart0_setup(BAUD_RATE, 0);
+    // setup UART at default baud rate, no interrupts
+    neorv32_uart0_setup(BAUD_RATE, 0);
 
+    // Run test functions
+    test_runner();
 
-  // 0 on success. Otherwise, sum of failed test function returns.
-  int exit;
-
-#if defined(AES256)
-  //printf("\nTesting AES256\n\n");
-#elif defined(AES192)
-  //printf("\nTesting AES192\n\n");
-#elif defined(AES128)
-  //printf("\nTesting AES128\n\n");
-#else
-  //printf("You need to specify a symbol between AES128, AES192 or AES256. Exiting");
-  return 0;
-#endif
-
-  // Should sum to 0 should nothing fail. Else, functions that fail will print to stdout and return 1.
-//   exit = test_encrypt_cbc() + test_decrypt_cbc() +
-// 	test_encrypt_ctr() + test_decrypt_ctr() +
-// 	test_decrypt_ecb() + test_encrypt_ecb();
-//   test_encrypt_ecb_verbose();
-
-    exit = test_encrypt_cbc();
-
-  return exit;
+  return glitch_result;
 }
 
-
+uint8_t test_runner(){
+    test_encrypt_cbc(0);
+}
 // prints string as hex
 static void phex(uint8_t* str)
 {
@@ -227,7 +211,7 @@ static int test_decrypt_cbc(void)
     }
 }
 
-static int test_encrypt_cbc(void)
+static int test_encrypt_cbc(int zero)
 {
 #if defined(AES256)
     uint8_t key[] = { 0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe, 0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
@@ -259,15 +243,18 @@ static int test_encrypt_cbc(void)
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_encrypt_buffer(&ctx, in, 64);
 
-    //printf("CBC encrypt: ");
-
-    if (!(0 == memcmp((char*) out, (char*) in, 64))) {
-        ////printf("SUCCESS!\n");
-	    return(super_secret_function());
+    int ret_val;
+    if ((0 == memcmp((char*) out, (char*) in, 64))) {
+	ret_val = 1;
     } else {
-        ////printf("FAILURE!\n");
-	    return(0);
+	ret_val = 0;
     }
+
+    if(zero){
+        super_secret_function();
+    }
+
+    return ret_val;
 }
 
 static int test_xcrypt_ctr(const char* xcrypt);
