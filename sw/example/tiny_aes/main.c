@@ -19,6 +19,7 @@
 /**@{*/
 /** UART BAUD rate */
 #define BAUD_RATE 19200 // Communication rate
+
 // Enable ECB, CTR and CBC mode. Note this can be done before including aes.h or at compile-time.
 // E.g. with GCC by using the -D flag: gcc -c aes.c -DCBC=0 -DCTR=1 -DECB=1
 #define CBC 1
