@@ -8,7 +8,7 @@ MARCH = rv32i_zicsr_zifencei
 #RISCV_PREFIX ?= riscv-none-elf-
 
 # Override default optimization goal
-EFFORT = -Os
+EFFORT = -O0
 
 # Add extended debug symbols
 USER_FLAGS += -ggdb -gdwarf-3

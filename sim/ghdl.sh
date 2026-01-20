@@ -18,7 +18,7 @@ $GHDL -m --work=neorv32 --workdir=build --std=08 neorv32_tb
 # GHDL run parameters
 if [ -z "$1" ]
   then
-    GHDL_RUN_ARGS="${@:---stop-time=5ms}"
+    GHDL_RUN_ARGS="${@:---stop-time=15ms}"
   else
     # Let's pass down all the parameters to GHDL
     GHDL_RUN_ARGS=$@
