@@ -151,22 +151,22 @@ void ecdsa_broken()
 
 
 
-int testRunner()
+int main_ecdh()
 {
-  int i;
-  int ncycles = 1;
+  // int i;
+  // int ncycles = 1;
 
   // if (argc > 1)
   // {
   //   ncycles = atoi(argv[1]);
   // }
 
-  for (i = 0; i < ncycles; ++i)
-  {
-    ecdh_demo();
-    ecdsa_broken();
-  }
-
+  // for (i = 0; i < ncycles; ++i)
+  // {
+  //   ecdh_demo();
+  //   ecdsa_broken();
+  // }
+  ecdh_demo();
   return 0;
 }
 

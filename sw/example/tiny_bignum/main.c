@@ -36,39 +36,34 @@ int glitch_result = 0;
 /// @brief A blank function that may used as a halting symbol; A point in the code to show a fault has occurred. E.g., an instruction skip allowed unreachable code—like this function—to be executed.
 uint8_t __attribute__((noinline)) super_secret_function()
 {
-    glitch_result = 1;
-    return (uint8_t)1; // Return PASS_SUCCESS since we "passed" the password check.
+  glitch_result = 1;
+  return (uint8_t)1; // Return PASS_SUCCESS since we "passed" the password check.
 }
 
-/**********************************************************************//**
- * Main function; runs a series of test functions for each tiny-aes-c library function.
- *
- * @return 0 on success, integer greater than 0 matching the number of failed function calls.
- **************************************************************************/
 int main() {
 
-      // capture all exceptions and give debug info via UART
+  // capture all exceptions and give debug info via UART
   // this is not required, but keeps us safe
-    neorv32_rte_setup();
+  neorv32_rte_setup();
 
-    // setup UART at default baud rate, no interrupts
-    neorv32_uart0_setup(BAUD_RATE, 0);
+  // setup UART at default baud rate, no interrupts
+  neorv32_uart0_setup(BAUD_RATE, 0);
 
-    // Run test functions
-    test_runner(0);
+  // Run test functions
+  test_runner(0);
 
   return glitch_result;
 }
 
-void test_runner(uint8_t zero){
+void __attribute__((noinline)) test_runner(uint8_t zero){
 
-    // Call test code
-    main_Factorial();
-    main_golden();
-    main_rsa();
+  // Call test code. return should be 0, addition is just here to trick the compiler to not inline this function.
+  main_Factorial();
+  // main_golden();
+  // main_rsa();
 
-    // run our glitch check
-    if(zero){
-      super_secret_function();
-    }
+  // run our glitch check
+  if(zero){
+    super_secret_function();
+  }
 }

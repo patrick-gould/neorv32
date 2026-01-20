@@ -1,3 +1,6 @@
+int main_ecdh(void);
+
+
 /* 
 
   Crypto using elliptic curves defined over the finite binary field GF(2^m) where m is prime.

@@ -8,32 +8,39 @@
 
 
 /**********************************************************************//**
- * @file tiny_lint/main.c
+ * @file tiny_ecdh/main.c
  * @author Patrick Gould
- * @brief An implementation of tiny-aes-c for the neorv32. See https://github.com/kokke/tiny-lint-c for original project.
+ * @brief An implementation of tiny-ecdh-c for the neorv32. See https://github.com/kokke/tiny-ecdh-c for original project.
  **************************************************************************/
-
-#include <neorv32.h>
-#include "ecdh.h"
-
 
 /**********************************************************************//**
  * @name User configuration
  **************************************************************************/
 /**@{*/
 /** UART BAUD rate */
-#define BAUD_RATE 19200
+#define BAUD_RATE 19200 // Communication rate
 /**@}*/
 
+// Includes
+#include <neorv32.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include "ecdh.h"
+
+// Prototypes
+void test_runner(uint8_t);
+
+int glitch_result = 0;
+
+/// @brief A blank function that may used as a halting symbol; A point in the code to show a fault has occurred. E.g., an instruction skip allowed unreachable code—like this function—to be executed.
+uint8_t __attribute__((noinline)) super_secret_function()
+{
+  glitch_result = 1;
+  return (uint8_t)1; // Return PASS_SUCCESS since we "passed" the password check.
+}
 
 
-/**********************************************************************//**
- * Main function;
- *
- * @note This program is a simple lint program written in C.
- *
- * @return 0 if execution was successful.
- **************************************************************************/
 int main() {
 
   // capture all exceptions and give debug info via UART
@@ -44,8 +51,18 @@ int main() {
   neorv32_uart0_setup(BAUD_RATE, 0);
 
   // Run test functions
-  testRunner();
+  test_runner(0);
 
-  return 0;
+  return glitch_result;
 }
 
+void __attribute__((noinline)) test_runner(uint8_t zero){
+
+  // Call test code
+  main_ecdh();
+
+  // run our glitch check
+  if(zero){
+    super_secret_function();
+  }
+}

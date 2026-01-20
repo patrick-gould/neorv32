@@ -75,6 +75,7 @@ int main() {
 uint8_t test_runner(){
     test_encrypt_cbc(0);
 }
+
 // prints string as hex
 static void phex(uint8_t* str)
 {
