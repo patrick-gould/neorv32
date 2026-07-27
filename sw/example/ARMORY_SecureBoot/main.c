@@ -9,7 +9,7 @@
 
 /**********************************************************************//**
  * @file ARMORY_AES/main.c
- * @author Patrick Gould
+ * @author [omitted]
  * @brief An implementation of Secureboot from ARMORY.
  **************************************************************************/
 

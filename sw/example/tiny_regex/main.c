@@ -9,7 +9,7 @@
 
 /**********************************************************************//**
  * @file tiny_ecdh/main.c
- * @author Patrick Gould
+ * @author [omitted]
  * @brief An implementation of tiny-ecdh-c for the neorv32. See https://github.com/kokke/tiny-ecdh-c for original project.
  **************************************************************************/
 

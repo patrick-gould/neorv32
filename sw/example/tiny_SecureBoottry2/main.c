@@ -9,7 +9,7 @@
 
 /**********************************************************************//**
  * @file tiny_aes/main.c
- * @author Patrick Gould
+ * @author [omitted]
  * @brief An implementation of tiny-aes-c for the neorv32. See https://github.com/kokke/tiny-AES-c for original project.
  **************************************************************************/
 
