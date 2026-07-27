@@ -42,7 +42,7 @@ static int test_encrypt_ctr(void);
 static int test_decrypt_ctr(void);
 static int test_encrypt_ecb(void);
 static int test_decrypt_ecb(void);
-uint8_t test_runner();
+uint8_t test_runner(uint8_t zero);
 static void test_encrypt_ecb_verbose(void);
 int glitch_result = 0;
 /// @brief A blank function that may used as a halting symbol; A point in the code to show a fault has occurred. E.g., an instruction skip allowed unreachable code—like this function—to be executed.
@@ -67,13 +67,17 @@ int main() {
     neorv32_uart0_setup(BAUD_RATE, 0);
 
     // Run test functions
-    test_runner();
+    test_runner(0);
 
   return glitch_result;
 }
 
-uint8_t test_runner(){
+uint8_t test_runner(uint8_t zero){
     test_encrypt_cbc(0);
+
+    if(zero){
+        super_secret_function();
+    }
 }
 
 // prints string as hex
@@ -250,10 +254,6 @@ static int test_encrypt_cbc(int zero)
 	ret_val = 1;
     } else {
 	ret_val = 0;
-    }
-
-    if(zero){
-        super_secret_function();
     }
 
     return ret_val;
