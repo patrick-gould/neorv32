@@ -9,8 +9,9 @@ MARCH = rv32i_zicsr_zifencei
 
 # Override default optimization goal
 EFFORT = -O0
+
 # Add extended debug symbols
-USER_FLAGS += -ggdb -gdwarf-3 -g
+USER_FLAGS += -ggdb -gdwarf-3
 
 # Adjust processor IMEM size
 USER_FLAGS += -Wl,--defsym,__neorv32_rom_size=64k

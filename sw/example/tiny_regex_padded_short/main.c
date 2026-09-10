@@ -8,9 +8,9 @@
 
 
 /**********************************************************************//**
- * @file tiny_aes/main.c
+ * @file tiny_ecdh/main.c
  * @author [omitted]
- * @brief An implementation of tiny-aes-c for the neorv32. See https://github.com/kokke/tiny-AES-c for original project.
+ * @brief An implementation of tiny-ecdh-c for the neorv32. See https://github.com/kokke/tiny-ecdh-c for original project.
  **************************************************************************/
 
 /**********************************************************************//**
@@ -19,36 +19,52 @@
 /**@{*/
 /** UART BAUD rate */
 #define BAUD_RATE 19200 // Communication rate
+/**@}*/
 
 // Includes
 #include <neorv32.h>
+#include <stdio.h>
+#include <string.h>
 #include <stdint.h>
+#include "re.h"
 
-uint8_t test_runner(uint8_t zero);
-int verifyPIN_main();
+// Prototypes
+void test_runner(uint8_t);
+
 int glitch_result = 0;
 
-/**********************************************************************//**
- * Main function; runs a series of test functions for each tiny-aes-c library function.
- *
- * @return 0 on success, integer greater than 0 matching the number of failed function calls.
- **************************************************************************/
+/// @brief A blank function that may used as a halting symbol; A point in the code to show a fault has occurred. E.g., an instruction skip allowed unreachable code—like this function—to be executed.
+uint8_t __attribute__((noinline)) super_secret_function()
+{
+  glitch_result = 1;
+  return (uint8_t)1; // Return PASS_SUCCESS since we "passed" the password check.
+}
+
+
 int main() {
 
-      // capture all exceptions and give debug info via UART
+  // capture all exceptions and give debug info via UART
   // this is not required, but keeps us safe
-    neorv32_rte_setup();
+  neorv32_rte_setup();
 
-    // setup UART at default baud rate, no interrupts
-    neorv32_uart0_setup(BAUD_RATE, 0);
+  // setup UART at default baud rate, no interrupts
+  neorv32_uart0_setup(BAUD_RATE, 0);
 
-    // Run test functions
-    test_runner(0);
+  // Run test functions
+  test_runner(0);
 
   return glitch_result;
 }
 
-uint8_t test_runner(uint8_t zero){
-    verifyPIN_main();
-}
+void __attribute__((noinline)) test_runner(uint8_t zero){
 
+  // Call test code
+  main_1();
+
+  asm("NOP");
+
+  // run our glitch check
+  if(zero){
+    super_secret_function();
+  }
+}
